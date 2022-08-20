@@ -12,10 +12,11 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal,Long> {
 
     @Query("select a from Animal a order by a.name")
-    public List<Animal> orderAlphabetically();
+    List<Animal> orderAlphabetically();
+
 
     @Query("select a from Animal a where a.no > ?1")
-    public List<Animal> animalByNumber(int number);
+    List<Animal> animalByNumber(int number);
 
 
 

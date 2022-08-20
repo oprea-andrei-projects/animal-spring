@@ -22,16 +22,17 @@ public class ControllAnimal {
 
     private AnimalRepository animalRepository;
 
+    private TipAnimalRepo tipAnimalRepo;
 
 
-    public ControllAnimal(AnimalRepository animalRepository) {
+
+    public ControllAnimal(AnimalRepository animalRepository, TipAnimalRepo tipAnimalRepo) {
 
         this.animalRepository = animalRepository;
 
-
+        this.tipAnimalRepo = tipAnimalRepo;
 
     }
-
 
 
     @GetMapping("/allAnimals")
@@ -40,40 +41,32 @@ public class ControllAnimal {
         return new ResponseEntity<>(animalRepository.findAll(), HttpStatus.ACCEPTED);
     }
 
-//    @PostMapping("/addAnimal")
-//    public Animal addAnimal(@RequestBody Animal animal){
-//        this.animalRepository.save(animal);
-//        return animal;
-//    }
-
-//    public String findName(String otherName){
-//
-//        return this.tipAnimalRepo.findAll().stream()
-//                .map(e->e.getName())
-//                .filter(e->equals(otherName))
-//                .collect(Collectors.toList()).get(0);
-//    }
 
 
+    @PostMapping("/addAnimal")
+    public ResponseEntity<Animal> addMyAnimal(@RequestBody Animal animal){
+
+
+            Optional<String> optionalS = Optional.of(this.tipAnimalRepo.findName(animal.getName()));
+
+            if(optionalS.isPresent()){
+
+                this.animalRepository.save(animal);
+                return new ResponseEntity<>(animal,HttpStatus.ACCEPTED);
+
+            }else{
+
+                throw new AnimaleDomestice("Nu este animal domestic !");
+
+            }
 
 
 
 
-//    @PostMapping("/addAnimal")
-//    public ResponseEntity<Animal> addMyAnimal(@RequestBody Animal animal){
-//
-//
-//        if(animal.getName().equals(findName(animal.getName()))){
-//
-//            this.animalRepository.save(animal);
-//        }else{
-//
-//            throw new AnimaleDomestice("Nu este animal domestic !");
-//        }
-//
-//
-//        return new ResponseEntity<>(animal,HttpStatus.ACCEPTED);
-//    }
+
+
+
+    }
 
     @GetMapping("/findAnimal/{id}")
     public Animal getById(@PathVariable Long id){

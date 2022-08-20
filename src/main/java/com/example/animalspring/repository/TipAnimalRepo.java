@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface TipAnimalRepo extends JpaRepository<TipuriPermiseDeAnimale,Long> {
 
     @Query("select n.name from TipuriPermiseDeAnimale n where n.name = ?1")
-    public String findName(String name);
+    String findName(String name);
 
 
 

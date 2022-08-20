@@ -21,10 +21,10 @@ public class AnimalSpringApplication {
 
     @Bean
     CommandLineRunner commandLineRunner(
-            TipAnimalRepo tipAnimalRepo){
+           AnimalRepository animalRepository){
             return args -> {
 
-                System.out.println(tipAnimalRepo.findName("name0"));
+
 
         };
     };

@@ -15,26 +15,14 @@ public class ControllerTipAnimal {
         this.tipAnimalRepo = tipAnimalRepo;
     }
 
+    @GetMapping("/getValidName/{name}")
+    public String findTheName(String name){
 
-    public String findAnimName(String otherName){
-
-        return this.tipAnimalRepo.findName(otherName);
-
-    }
-
-    @GetMapping("/foundName/{name}")
-    public boolean validateAnimName(@PathVariable String name){
-
-        if(findAnimName(name).equals(null)){
-
-            return false;
-
-        }else{
-
-            return true;
-        }
+        return null;
 
     }
+
+
 
 
 
