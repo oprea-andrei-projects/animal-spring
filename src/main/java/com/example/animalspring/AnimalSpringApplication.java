@@ -4,6 +4,7 @@ import com.example.animalspring.model.Animal;
 import com.example.animalspring.model.TipuriPermiseDeAnimale;
 import com.example.animalspring.repository.AnimalRepository;
 import com.example.animalspring.repository.TipAnimalRepo;
+import com.example.animalspring.service.ServiceAnimal;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,10 +22,10 @@ public class AnimalSpringApplication {
 
     @Bean
     CommandLineRunner commandLineRunner(
-           AnimalRepository animalRepository){
+            ServiceAnimal serviceAnimal){
             return args -> {
 
-
+                serviceAnimal.orderAtoZ().stream().forEach(System.out::println);
 
         };
     };

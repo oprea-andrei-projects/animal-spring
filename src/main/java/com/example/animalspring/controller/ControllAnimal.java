@@ -8,6 +8,7 @@ import com.example.animalspring.exceptii.NumaruMareAnumale;
 import com.example.animalspring.model.Animal;
 import com.example.animalspring.repository.AnimalRepository;
 import com.example.animalspring.repository.TipAnimalRepo;
+import com.example.animalspring.service.ServiceAnimal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +25,26 @@ public class ControllAnimal {
 
     private TipAnimalRepo tipAnimalRepo;
 
+    private ServiceAnimal serviceAnimal;
 
 
-    public ControllAnimal(AnimalRepository animalRepository, TipAnimalRepo tipAnimalRepo) {
+    public ControllAnimal(AnimalRepository animalRepository, TipAnimalRepo tipAnimalRepo, ServiceAnimal serviceAnimal) {
 
         this.animalRepository = animalRepository;
 
         this.tipAnimalRepo = tipAnimalRepo;
 
+        this.serviceAnimal = serviceAnimal;
+
     }
 
 
     @GetMapping("/allAnimals")
-    public ResponseEntity<List<Animal>>getAllMyAnimals(){
+    public ResponseEntity<List<Animal>>getAllMyAnimals() throws InterruptedException {
 
-        return new ResponseEntity<>(animalRepository.findAll(), HttpStatus.ACCEPTED);
+        List<Animal> myAnimals = serviceAnimal.getAllAnimals();
+
+        return new ResponseEntity<>(myAnimals, HttpStatus.OK);
     }
 
 
@@ -46,25 +52,9 @@ public class ControllAnimal {
     @PostMapping("/addAnimal")
     public ResponseEntity<Animal> addMyAnimal(@RequestBody Animal animal){
 
+        Animal a = this.serviceAnimal.addTheAnimal(animal);
 
-            Optional<String> optionalS = Optional.of(this.tipAnimalRepo.findName(animal.getName()));
-
-            if(optionalS.isPresent()){
-
-                this.animalRepository.save(animal);
-                return new ResponseEntity<>(animal,HttpStatus.ACCEPTED);
-
-            }else{
-
-                throw new AnimaleDomestice("Nu este animal domestic !");
-
-            }
-
-
-
-
-
-
+        return new ResponseEntity<>(a, HttpStatus.CREATED);
 
     }
 
@@ -81,12 +71,9 @@ public class ControllAnimal {
     @PutMapping("/updateAnimal")
     public ResponseEntity<Animal> updateAnimal(@RequestBody Animal animal){
 
-        Animal animal1 = this.animalRepository.findById(animal.getId()).get();
-        animal1.setName(animal.getName());
-        animal1.setNo((animal.getNo()));
+        Animal animal1 = serviceAnimal.updateAnimal(animal);
 
-        this.animalRepository.save(animal1);
-        return new ResponseEntity<>(animal1, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(animal1, HttpStatus.OK);
 
     }
 
@@ -94,26 +81,11 @@ public class ControllAnimal {
 
 
     @DeleteMapping("/deleteAnim/{id}")
-    public ResponseEntity<Animal> deleteMyAnim(@PathVariable Long id){
+    public ResponseEntity<Long> deleteMyAnim(@PathVariable Long id){
 
+        this.serviceAnimal.deleteAnimal(id);
 
-
-        Animal a = this.animalRepository.findById(id).get();
-
-        if(this.animalRepository.findById(id).isEmpty()){
-
-            //nu merge !!!!!
-
-
-            throw new MissingAnimalException("Acest animal nu exista !");
-        }else{
-
-            this.animalRepository.delete(a);
-
-        }
-
-
-        return new ResponseEntity<>(a,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(id,HttpStatus.OK);
 
 
     }
@@ -121,11 +93,11 @@ public class ControllAnimal {
 
 
     @GetMapping("/orderAlphabetically")
-    public ResponseEntity<List<Animal>>  getAnimalAlpha(){
+    public ResponseEntity<List<Animal>> getAnimalAlpha(){
 
-        List<Animal> aList = this.animalRepository.orderAlphabetically();
+       List<Animal>azList = serviceAnimal.orderAtoZ();
 
-        return new ResponseEntity<>(aList, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(azList, HttpStatus.OK);
     }
 
     @GetMapping("/animalsByNumber/{number}")

@@ -23,4 +23,13 @@ public class Animal {
         this.name = name;
         this.no = no;
     }
+
+    @Override
+    public boolean equals(Object o){
+
+        Animal animal = (Animal) o;
+
+        return this.name.equals(animal.name);
+
+    }
 }

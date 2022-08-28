@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Api from "../../Api.js";
 import Animal from "./Animal.js"
-
+import Spinner from 'react-bootstrap/Spinner';
+import { useNavigate } from "react-router-dom"
 
 function Home() {
 
@@ -51,16 +52,24 @@ function Home() {
 
                     {
                         animals.length == 0
-                        ?
-                        (
-                            <p>Loading...</p>
-                        )
-                        :
-                        (
-                            animals.map(element => {
-                                return <Animal animal = {element} />
-                            })
-                        )
+                            ?
+                            (
+
+
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+
+                               
+
+
+                            )
+                            :
+                            (
+                                animals.map(element => {
+                                    return <Animal animal={element} />
+                                })
+                            )
 
 
 

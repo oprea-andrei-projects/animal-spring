@@ -1,12 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Components/Home/Home";
 
-function App() {
-  return (
-    <div className="App">
-    
 
-    </div>
-  );
-}
 
-export default App;
+export default () => {
+
+
+
+
+
+    return<>
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+
+
+
+        </Routes>
+        
+      
+      </BrowserRouter>
+
+
+
+
+
+
+    </>
+
+
+};
